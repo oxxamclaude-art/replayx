@@ -1,0 +1,21 @@
+# Build output
+target/
+*.class
+*.jar
+
+# Demo / local run artifacts
+cassettes/
+build/
+demo/cassettes/
+demo/replayx-report.json
+
+# Snapshot sync metadata (never committed)
+*.muse-github-snapshot-sync.json
+*.muse-github-snapshot-sync.json.tmp-*
+
+# Editors / OS
+.idea/
+*.iml
+.vscode/
+.DS_Store
+*.tmp
