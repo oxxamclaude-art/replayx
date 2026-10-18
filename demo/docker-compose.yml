@@ -1,0 +1,35 @@
+# ReplayX demo: sample checkout backends + payment stub.
+#
+# backend-v1 points its downstream payment URL at the host machine, where the
+# ReplayX dependency capture/replay proxy runs (host.docker.internal).
+# Run the capture / diff steps from the host as documented in ../README.md.
+name: replayx-demo
+
+services:
+  payment-stub:
+    build: .
+    command: ["python3", "payment-stub.py", "--port", "8082"]
+    ports:
+      - "8082:8082"
+
+  backend-v1:
+    build: .
+    command: ["python3", "backend.py", "--mode", "v1", "--port", "8081",
+              "--payment-url", "http://host.docker.internal:8091"]
+    ports:
+      - "8081:8081"
+    depends_on:
+      - payment-stub
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  backend-v2:
+    build: .
+    command: ["python3", "backend.py", "--mode", "v2", "--port", "8083",
+              "--payment-url", "http://host.docker.internal:8092"]
+    ports:
+      - "8083:8083"
+    depends_on:
+      - payment-stub
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
